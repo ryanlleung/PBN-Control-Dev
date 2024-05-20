@@ -4,8 +4,8 @@ from dynamixel_sdk import *                    # Uses Dynamixel SDK library
 
 
 # Device setting
-DXL1_ID                     = 1                 # Dynamixel ID
-DXL2_ID                     = 4                 # Dynamixel ID
+DXL1_ID                     = 2                 # Dynamixel ID
+DXL2_ID                     = 3                 # Dynamixel ID
 BAUDRATE                    = 57600             # Dynamixel default baudrate : 57600
 DEVICENAME                  = 'COM3'            # Check which port is being used on your controller                                                # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
