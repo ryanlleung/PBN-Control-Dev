@@ -3,6 +3,13 @@
 from dynamixel_sdk import *                    # Uses Dynamixel SDK library
 
 
+# Device setting
+DXL1_ID                     = 1                 # Dynamixel ID
+DXL2_ID                     = 4                 # Dynamixel ID
+BAUDRATE                    = 57600             # Dynamixel default baudrate : 57600
+DEVICENAME                  = 'COM3'            # Check which port is being used on your controller                                                # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
+
+
 # Control table address
 ADDR_OPERATING_MODE =         11
 ADDR_CURRENT_LIMIT =          38
@@ -47,12 +54,6 @@ LEN_PRESENT_TEMPERATURE = 2
 # Protocol version
 PROTOCOL_VERSION            = 2.0               # See which protocol version is used in the Dynamixel
 
-# Device setting
-DXL1_ID                     = 2                 # Dynamixel#1 ID : 1
-DXL2_ID                     = 3                 # Dynamixel#1 ID : 2
-BAUDRATE                    = 57600             # Dynamixel default baudrate : 57600
-DEVICENAME                  = 'COM3'            # Check which port is being used on your controller
-                                                # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
 #### Initialisation ####
 
@@ -427,7 +428,7 @@ class Dynamixel:
             self.set_velocity(DXL1_ID, 0)
             self.set_velocity(DXL2_ID, 0)
             return
-        self.set_velocity(DXL1_ID, -vel1)
+        self.set_velocity(DXL1_ID, vel1)
         self.set_velocity(DXL2_ID, vel2)
         time.sleep(dur-BUFF)
         if brake:
@@ -472,20 +473,20 @@ if __name__ == "__main__":
     
     #### Profile velocity and acceleration Demo ####
     
-    dnx.set_mode(DXL1_ID, "extpos")
-    dnx.set_mode(DXL2_ID, "extpos")
+    # dnx.set_mode(DXL1_ID, "extpos")
+    # dnx.set_mode(DXL2_ID, "extpos")
     
-    dnx.set_profile_acceleration(DXL1_ID, 20)
-    dnx.set_profile_acceleration(DXL2_ID, 20)
-    dnx.set_profile_velocity(DXL1_ID, 200)
-    dnx.set_profile_velocity(DXL2_ID, 200)
+    # dnx.set_profile_acceleration(DXL1_ID, 20)
+    # dnx.set_profile_acceleration(DXL2_ID, 20)
+    # dnx.set_profile_velocity(DXL1_ID, 200)
+    # dnx.set_profile_velocity(DXL2_ID, 200)
     
-    dnx.set_position(DXL1_ID, 1000)
-    time.sleep(5)
-    print(f"Position 1: {dnx.get_position(DXL1_ID)-dnx.motor1_pos0}, Position 2: {dnx.get_position(DXL2_ID)-dnx.motor2_pos0}")
-    dnx.set_position(DXL1_ID, 0)
-    time.sleep(5)
-    print(f"Position 1: {dnx.get_position(DXL1_ID)-dnx.motor1_pos0}, Position 2: {dnx.get_position(DXL2_ID)-dnx.motor2_pos0}")
+    # dnx.set_position(DXL1_ID, 1000)
+    # time.sleep(5)
+    # print(f"Position 1: {dnx.get_position(DXL1_ID)-dnx.motor1_pos0}, Position 2: {dnx.get_position(DXL2_ID)-dnx.motor2_pos0}")
+    # dnx.set_position(DXL1_ID, 0)
+    # time.sleep(5)
+    # print(f"Position 1: {dnx.get_position(DXL1_ID)-dnx.motor1_pos0}, Position 2: {dnx.get_position(DXL2_ID)-dnx.motor2_pos0}")
     
     #### Dualpos Demo ####
     # dnx.set_current_limit(DXL1_ID, 800)
