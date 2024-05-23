@@ -418,8 +418,8 @@ class Dynamixel:
     def set_dualpos(self, pos1, pos2, mode="curpos"):
         self.set_mode(DXL1_ID, mode)
         self.set_mode(DXL2_ID, mode)
-        self.set_position(DXL1_ID, -pos1 + self.motor1_pos0, mode)
-        self.set_position(DXL2_ID, pos2 + self.motor1_pos0, mode)        
+        self.set_position(DXL1_ID, pos1 + self.motor1_pos0, mode)
+        self.set_position(DXL2_ID, pos2 + self.motor2_pos0, mode)        
     
     def set_dualvel(self, vel1, vel2, dur, brake=True):
         BUFF = 0.2
@@ -488,34 +488,6 @@ if __name__ == "__main__":
     # time.sleep(5)
     # print(f"Position 1: {dnx.get_position(DXL1_ID)-dnx.motor1_pos0}, Position 2: {dnx.get_position(DXL2_ID)-dnx.motor2_pos0}")
     
-    #### Dualpos Demo ####
-    # dnx.set_current_limit(DXL1_ID, 800)
-    # dnx.set_current_limit(DXL2_ID, 800)
-    
-    # dnx.set_profile_acceleration(DXL1_ID, 1)
-    # dnx.set_profile_acceleration(DXL2_ID, 1)
-    # dnx.set_profile_velocity(DXL1_ID, 10)
-    # dnx.set_profile_velocity(DXL2_ID, 10)
-    
-    # dnx.home_position(DXL1_ID)
-    # dnx.home_position(DXL2_ID)
-    
-    # dnx.set_dualpos(500, 0, "extpos")
-    # time.sleep(5)
-    # print(f"Position 1: {dnx.get_position(DXL1_ID)-dnx.motor1_pos0}, Position 2: {dnx.get_position(DXL2_ID)-dnx.motor2_pos0}")
-    
-    # dnx.set_dualpos(0, 0, "extpos")
-    # time.sleep(5)
-    # print(f"Position 1: {dnx.get_position(DXL1_ID)-dnx.motor1_pos0}, Position 2: {dnx.get_position(DXL2_ID)-dnx.motor2_pos0}")
-
-    # #### Dualvel Demo ####
-    # dnx.set_dualvel(50, 50, 1)
-    # dnx.set_dualvel(-50, -50, 1.05)
-    # dnx.set_dualvel(50, 0, 1)
-    # dnx.set_dualvel(-50, 0, 1.05)
-    # dnx.set_dualvel(0, 50, 1)
-    # dnx.set_dualvel(0, -50, 1.2)
-
     dnx.disable_torque(DXL1_ID)
     dnx.disable_torque(DXL2_ID)
     dnx.close_port()
