@@ -412,7 +412,7 @@ class MainWindow(QWidget):
         
         
     def keyPressEvent(self, event):
-        boost_multiplier = 10 if event.modifiers() & Qt.ShiftModifier else 1
+        boost_multiplier = 5 if event.modifiers() & Qt.ShiftModifier else 1
 
         if event.key() == Qt.Key_E:
             self.motor1_vel_value.setText(str(-5 * boost_multiplier))

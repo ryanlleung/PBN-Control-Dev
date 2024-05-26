@@ -16,6 +16,10 @@ from PyQt5.QtMultimedia import *
 from PyQt5.QtMultimediaWidgets import *
 
 
+ARD_ID1 = 'COM5'
+ARD_ID2 = 'COM6'
+
+
 class SerialReader(threading.Thread):
     def __init__(self, serial_port):
         super().__init__()
@@ -93,12 +97,12 @@ def main():
 
     # Open the serial port
     try:
-        serial_port = serial.Serial('COM4', 9600)
-        print("Connected to COM4")
+        serial_port = serial.Serial(ARD_ID1, 9600)
+        print(f"Connected to {ARD_ID1}")
     except serial.SerialException:
         try:
-            serial_port = serial.Serial('COM5', 9600)
-            print("Connected to COM5")
+            serial_port = serial.Serial(ARD_ID2, 9600)
+            print(f"Connected to {ARD_ID2}")
         except serial.SerialException:
             print("No serial port available")
             sys.exit(1)
