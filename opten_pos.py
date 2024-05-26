@@ -113,22 +113,22 @@ dnx.set_mode(DXL1_ID, "extpos")
 dnx.set_mode(DXL2_ID, "extpos")
 dnx.set_profile_acceleration(DXL1_ID, 10)
 dnx.set_profile_acceleration(DXL2_ID, 10)
-dnx.set_profile_velocity(DXL1_ID, 200)
-dnx.set_profile_velocity(DXL2_ID, 200)
+dnx.set_profile_velocity(DXL1_ID, 50)
+dnx.set_profile_velocity(DXL2_ID, 50)
 
 logger = DataLogger(motor1_pos0, motor2_pos0)
 logger.start()
 print("Data logger started")
 
 time.sleep(1)
-for i in range(3):
+for i in range(1):
     logger.set_position(DXL1_ID, motor1_pos0 - 1000)
     time.sleep(3)
     logger.set_position(DXL1_ID, motor1_pos0)
     time.sleep(3)
     
 time.sleep(1)
-for i in range(3):
+for i in range(1):
     logger.set_position(DXL2_ID, motor2_pos0 - 1000)
     time.sleep(3)
     logger.set_position(DXL2_ID, motor2_pos0)

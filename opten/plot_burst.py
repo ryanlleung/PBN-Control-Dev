@@ -27,9 +27,9 @@ class SerialReader(threading.Thread):
         # self.lock = threading.Lock()
         
         self.theta = 0
-        if self.serialCom.name == 'COM4':
-            self.theta = -2.3
-        elif self.serialCom.name == 'COM5':
+        if self.serialCom.name == 'COM5':
+            self.theta = 0
+        elif self.serialCom.name == 'COM6':
             self.theta = 0
 
     def run(self):
@@ -150,12 +150,12 @@ class SerialPlotter(QMainWindow):
 
 # Check if the serial port is available
 try:
-    serialCom = serial.Serial('COM4', 9600)
-    print("Connected to COM4")
+    serialCom = serial.Serial('COM5', 9600)
+    print("Connected to COM5")
 except serial.SerialException:
     try:
-        serialCom = serial.Serial('COM5', 9600)
-        print("Connected to COM5")
+        serialCom = serial.Serial('COM6', 9600)
+        print("Connected to COM6")
     except serial.SerialException:
         print("No serial port available")
         sys.exit(1)

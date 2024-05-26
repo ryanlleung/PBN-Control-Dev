@@ -87,8 +87,8 @@ class SerialPlotter(QMainWindow):
         self.graphWidget.showGrid(x=True, y=True)
         self.graphWidget.addLegend()
 
-        self.plotData1 = self.graphWidget.plot([], [], pen=None, symbol='x', symbolSize=10, symbolBrush=('r'), name="COM4")
-        self.plotData2 = self.graphWidget.plot([], [], pen=None, symbol='x', symbolSize=10, symbolBrush=('b'), name="COM5")
+        self.plotData1 = self.graphWidget.plot([], [], pen=None, symbol='x', symbolSize=10, symbolBrush=('r'), name="COM5")
+        self.plotData2 = self.graphWidget.plot([], [], pen=None, symbol='x', symbolSize=10, symbolBrush=('b'), name="COM6")
         
         # Add a button to reset x and y values
         self.resetButton = QPushButton("Reset Position")
@@ -99,19 +99,19 @@ class SerialPlotter(QMainWindow):
         self.COMBox = QHBoxLayout()
         self.layout.addLayout(self.COMBox)
         
-        self.COM4Box = QVBoxLayout()
-        self.xLabel1 = QLabel(f"COM4 X Position: {round(self.serialReader1.x, 2)} mm")
-        self.yLabel1 = QLabel(f"COM4 Y Position: {round(self.serialReader1.y, 2)} mm")
-        self.COM4Box.addWidget(self.xLabel1)
-        self.COM4Box.addWidget(self.yLabel1)
-        self.COMBox.addLayout(self.COM4Box)
-        
         self.COM5Box = QVBoxLayout()
-        self.xLabel2 = QLabel(f"COM5 X Position: {round(self.serialReader2.x, 2)} mm")
-        self.yLabel2 = QLabel(f"COM5 Y Position: {round(self.serialReader2.y, 2)} mm")
-        self.COM5Box.addWidget(self.xLabel2)
-        self.COM5Box.addWidget(self.yLabel2)
+        self.xLabel1 = QLabel(f"COM5 X Position: {round(self.serialReader1.x, 2)} mm")
+        self.yLabel1 = QLabel(f"COM5 Y Position: {round(self.serialReader1.y, 2)} mm")
+        self.COM5Box.addWidget(self.xLabel1)
+        self.COM5Box.addWidget(self.yLabel1)
         self.COMBox.addLayout(self.COM5Box)
+        
+        self.COM6Box = QVBoxLayout()
+        self.xLabel2 = QLabel(f"COM6 X Position: {round(self.serialReader2.x, 2)} mm")
+        self.yLabel2 = QLabel(f"COM6 Y Position: {round(self.serialReader2.y, 2)} mm")
+        self.COM6Box.addWidget(self.xLabel2)
+        self.COM6Box.addWidget(self.yLabel2)
+        self.COMBox.addLayout(self.COM6Box)
 
         # Update the plot periodically
         self.timer = QTimer()
@@ -135,22 +135,22 @@ class SerialPlotter(QMainWindow):
         QApplication.processEvents()  # Process any other Qt events
 
     def update_labels(self):
-        self.xLabel1.setText(f"COM4 X Position: {round(self.serialReader1.x, 2)} mm")
-        self.yLabel1.setText(f"COM4 Y Position: {round(self.serialReader1.y, 2)} mm")
-        self.xLabel2.setText(f"COM5 X Position: {round(self.serialReader2.x, 2)} mm")
-        self.yLabel2.setText(f"COM5 Y Position: {round(self.serialReader2.y, 2)} mm")
+        self.xLabel1.setText(f"COM5 X Position: {round(self.serialReader1.x, 2)} mm")
+        self.yLabel1.setText(f"COM5 Y Position: {round(self.serialReader1.y, 2)} mm")
+        self.xLabel2.setText(f"COM6 X Position: {round(self.serialReader2.x, 2)} mm")
+        self.yLabel2.setText(f"COM6 Y Position: {round(self.serialReader2.y, 2)} mm")
         
 try:
-    serialCom1 = serial.Serial('COM4', 9600)
-    print("Connected to COM4")
-except serial.SerialException:
-    print("COM4 not available")
-    sys.exit(1)
-try:
-    serialCom2 = serial.Serial('COM5', 9600)
+    serialCom1 = serial.Serial('COM5', 9600)
     print("Connected to COM5")
 except serial.SerialException:
     print("COM5 not available")
+    sys.exit(1)
+try:
+    serialCom2 = serial.Serial('COM6', 9600)
+    print("Connected to COM6")
+except serial.SerialException:
+    print("COM6 not available")
     sys.exit(1)
 
             
@@ -158,13 +158,13 @@ serialCom1.setDTR(False)
 time.sleep(1)
 serialCom1.flushInput()
 serialCom1.setDTR(True)
-print("COM4 reset")
+print("COM5 reset")
 
 serialCom2.setDTR(False)
 time.sleep(1)
 serialCom2.flushInput()
 serialCom2.setDTR(True)
-print("COM5 reset")
+print("COM6 reset")
 
 
 app = QApplication(sys.argv)
@@ -183,11 +183,11 @@ exit_code = app.exec_()
 serialReader1.stop()  # Stop the serial reader thread
 serialReader1.join()  # Wait for the serial reader thread to finish
 serialCom1.close()
-print("COM4 closed")
+print("COM5 closed")
 
 serialReader2.stop()  # Stop the serial reader thread
 serialReader2.join()  # Wait for the serial reader thread to finish
 serialCom2.close()
-print("COM5 closed")
+print("COM6 closed")
 
 sys.exit(exit_code)

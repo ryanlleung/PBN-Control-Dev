@@ -130,7 +130,7 @@ class MainWindow(QWidget):
         
         self.motor1_pos_scale, self.motor2_pos_scale = 55.85, 55.85
         self.motor1_apos = -self.dnx.get_position(DXL1_ID)/self.motor1_pos_scale
-        self.motor2_apos = -self.dnx.get_position(DXL2_ID)/self.motor2_pos_scale*-1
+        self.motor2_apos = -self.dnx.get_position(DXL2_ID)/self.motor2_pos_scale
         self.opten1_posx, self.opten2_posx = 0, 0
         self.opten1_posy, self.opten2_posy = 0, 0
         
@@ -139,7 +139,7 @@ class MainWindow(QWidget):
         self.opten1_posx_data, self.opten2_posx_data = np.array([]), np.array([])
         self.opten1_posy_data, self.opten2_posy_data = np.array([]), np.array([])
         
-        self.keyboard_speed = 1       
+        self.keyboard_speed = 6      
         self.initUI()
         
         if self.have_gamepad():
@@ -542,12 +542,12 @@ class MainWindow(QWidget):
         self.opten2_posy_plot.setData(self.time_data[-plot_range:], self.opten2_posy_data[-plot_range:])
         
     def keyPressEvent(self, event):
-        boost_multiplier = 2 if event.modifiers() & Qt.ShiftModifier else 1
+        boost_multiplier = 5 if event.modifiers() & Qt.ShiftModifier else 1
 
         if event.key() == Qt.Key_Q:
-            self.motor1_vel_value.setText(str(self.keyboard_speed * boost_multiplier))
-        elif event.key() == Qt.Key_W:
             self.motor1_vel_value.setText(str(-self.keyboard_speed * boost_multiplier))
+        elif event.key() == Qt.Key_W:
+            self.motor1_vel_value.setText(str(self.keyboard_speed * boost_multiplier))
         elif event.key() == Qt.Key_S:
             self.motor2_vel_value.setText(str(self.keyboard_speed * boost_multiplier))
         elif event.key() == Qt.Key_A:
