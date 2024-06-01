@@ -20,7 +20,7 @@ class SerialReader(QThread):
         self.x, self.y = 0, 0
         self.flip_x = flip_x
         self.flip_y = flip_y
-        self.pixels = None
+        self.pixels = np.zeros((36, 36), dtype=np.uint8)
         if mode not in ["burst", "camera"]:
             raise ValueError(f"Mode {mode} not recognised, must be 'burst' or 'camera'")
         self.mode = mode

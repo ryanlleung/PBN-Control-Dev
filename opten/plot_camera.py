@@ -77,7 +77,7 @@ class SerialImagePlotter(QMainWindow):
         self.timer.start()
 
         QApplication.setStyle(QStyleFactory.create('Fusion'))
-        self.setWindowTitle("GUI")
+        self.setWindowTitle("Camera Plotter")
         self.show()
 
     def update_plot(self):

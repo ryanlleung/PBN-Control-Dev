@@ -44,6 +44,7 @@ class DataLogger(threading.Thread):
         self.motor1_pos0 = motor1_pos0
         self.motor2_pos0 = motor2_pos0
         self.motor1_apos_data, self.motor2_apos_data = np.array([]), np.array([])
+        self.motor1_cur_data, self.motor2_cur_data = np.array([]), np.array([])
         self.opten1_posx_data, self.opten1_posy_data = np.array([]), np.array([])
         self.opten2_posx_data, self.opten2_posy_data = np.array([]), np.array([])
         self.pause_poll = False
@@ -52,10 +53,14 @@ class DataLogger(threading.Thread):
     def run(self):
         while self.running:
             if not self.pause_poll:
-                motor1_apos = (dnx.get_position(DXL1_ID) - motor1_pos0) / 52.5
-                motor2_apos = (dnx.get_position(DXL2_ID) - motor2_pos0) / 52.5
+                motor1_apos = (dnx.get_position(DXL1_ID) - motor1_pos0) / 52
+                motor2_apos = (dnx.get_position(DXL2_ID) - motor2_pos0) / 52
+                motor1_cur = dnx.get_current(DXL1_ID)
+                motor2_cur = dnx.get_current(DXL2_ID)
                 self.motor1_apos_data = np.append(self.motor1_apos_data, motor1_apos)
                 self.motor2_apos_data = np.append(self.motor2_apos_data, motor2_apos)
+                self.motor1_cur_data = np.append(self.motor1_cur_data, motor1_cur)
+                self.motor2_cur_data = np.append(self.motor2_cur_data, motor2_cur)
                 self.opten1_posx_data = np.append(self.opten1_posx_data, self.opt.serial_reader1.x)
                 self.opten1_posy_data = np.append(self.opten1_posy_data, self.opt.serial_reader1.y)
                 self.opten2_posx_data = np.append(self.opten2_posx_data, self.opt.serial_reader2.x)
@@ -75,7 +80,7 @@ class DataLogger(threading.Thread):
     def set_2velocity(self, velocity1, velocity2):
         self.pause_poll = True
         time.sleep(0.05)
-        dnx.set_velocity(DXL1_ID, -velocity1)
+        dnx.set_velocity(DXL1_ID, velocity1)
         time.sleep(0.05)
         dnx.set_velocity(DXL2_ID, velocity2)
         time.sleep(0.05)
@@ -91,9 +96,11 @@ class DataLogger(threading.Thread):
     def save(self, filename=None):
         df = pd.DataFrame({'Time': np.round(self.time_data, 3),
                             'Motor1 Pos': np.round(self.motor1_apos_data, 3),
+                            'Motor1 Cur': np.round(self.motor1_cur_data, 3),
                             'Opten1 PosX': np.round(self.opten1_posx_data, 3),
                             'Opten1 PosY': np.round(self.opten1_posy_data, 3),
                             'Motor2 Pos': np.round(self.motor2_apos_data, 3),
+                            'Motor2 Cur': np.round(self.motor2_cur_data, 3),
                             'Opten2 PosX': np.round(self.opten2_posx_data, 3),
                             'Opten2 PosY': np.round(self.opten2_posy_data, 3)})
         os.makedirs('./exports', exist_ok=True)
@@ -111,45 +118,49 @@ motor2_pos0 = dnx.get_position(DXL2_ID)
 
 dnx.set_mode(DXL1_ID, "extpos")
 dnx.set_mode(DXL2_ID, "extpos")
-dnx.set_profile_acceleration(DXL1_ID, 10)
-dnx.set_profile_acceleration(DXL2_ID, 10)
-dnx.set_profile_velocity(DXL1_ID, 50)
-dnx.set_profile_velocity(DXL2_ID, 50)
+dnx.set_profile_acceleration(DXL1_ID, 3)
+dnx.set_profile_acceleration(DXL2_ID, 3)
+dnx.set_profile_velocity(DXL1_ID, 33.3/2)
+dnx.set_profile_velocity(DXL2_ID, 33.3/2)
 
 logger = DataLogger(motor1_pos0, motor2_pos0)
 logger.start()
 print("Data logger started")
 
-time.sleep(1)
-for i in range(1):
-    logger.set_position(DXL1_ID, motor1_pos0 - 1000)
-    time.sleep(3)
-    logger.set_position(DXL1_ID, motor1_pos0)
-    time.sleep(3)
-    
-time.sleep(1)
-for i in range(1):
-    logger.set_position(DXL2_ID, motor2_pos0 - 1000)
-    time.sleep(3)
-    logger.set_position(DXL2_ID, motor2_pos0)
-    time.sleep(3)
+
+#### Motor Movement ####
+
+PAUSE_TIME = 7.5
 
 # time.sleep(1)
 # for i in range(5):
-#     logger.set_2velocity(50, 50)
-#     time.sleep(1)
-#     logger.set_2velocity(0, 0)
-#     time.sleep(1)
-#     logger.set_2velocity(-50, -50)
-#     time.sleep(1)
-#     logger.set_2velocity(0, 0)
-#     time.sleep(1)
+#     logger.set_position(DXL1_ID, motor1_pos0 - 1000)
+#     time.sleep(PAUSE_TIME)
+#     logger.set_position(DXL1_ID, motor1_pos0)
+#     time.sleep(PAUSE_TIME)
+    
+# time.sleep(1)
+# for i in range(5):
+#     logger.set_position(DXL2_ID, motor2_pos0 - 1000)
+#     time.sleep(PAUSE_TIME)
+#     logger.set_position(DXL2_ID, motor2_pos0)
+#     time.sleep(PAUSE_TIME)
 
+time.sleep(1)
+for i in range(5):
+    logger.set_position(DXL1_ID, motor1_pos0 - 1000)
+    logger.set_position(DXL2_ID, motor2_pos0 - 1000)
+    time.sleep(PAUSE_TIME)
+    logger.set_position(DXL1_ID, motor1_pos0)
+    logger.set_position(DXL2_ID, motor2_pos0)
+    time.sleep(PAUSE_TIME)
+    
+
+#### Save Data ####
 
 filename = logger.save()
 logger.stop()
 logger.join()
-
 
 df_motor = pd.read_csv(filename)
 time_motor = df_motor['Time'].values
@@ -162,15 +173,33 @@ y_opten2 = df_motor['Opten2 PosY'].values
 
 fig, ax = plt.subplots(2, 1, figsize=(10, 10))
 ax[0].plot(time_motor, x_motor1, label='Motor 1')
-ax[0].plot(time_motor, x_opten1, label='Opten 1')
+ax[0].plot(time_motor, y_opten1, label='Opten 1 Y')
+ax[0].plot(time_motor, x_opten1, label='Opten 1 X')
 ax[1].plot(time_motor, x_motor2, label='Motor 2')
-ax[1].plot(time_motor, x_opten2, label='Opten 2')
+ax[1].plot(time_motor, y_opten2, label='Opten 2 Y')
+ax[1].plot(time_motor, x_opten2, label='Opten 2 X')
 ax[0].set_title('Motor 1')
 ax[1].set_title('Motor 2')
 ax[0].set_xlabel('Time (s)')
 ax[1].set_xlabel('Time (s)')
 ax[0].set_ylabel('Position (mm)')
 ax[1].set_ylabel('Position (mm)')
+ax[0].legend()
+ax[1].legend()
+ax[0].grid()
+ax[1].grid()
+plt.show()
+
+# plot current
+fig, ax = plt.subplots(2, 1, figsize=(10, 10))
+ax[0].plot(time_motor, df_motor['Motor1 Cur'].values, label='Motor 1')
+ax[1].plot(time_motor, df_motor['Motor2 Cur'].values, label='Motor 2')
+ax[0].set_title('Motor 1')
+ax[1].set_title('Motor 2')
+ax[0].set_xlabel('Time (s)')
+ax[1].set_xlabel('Time (s)')
+ax[0].set_ylabel('Current (mA)')
+ax[1].set_ylabel('Current (mA)')
 ax[0].legend()
 ax[1].legend()
 ax[0].grid()

@@ -179,7 +179,7 @@ void setCPI(int cpi)
   adns_write_reg(Config1, cpival);
   adns_com_end();
 
-  Serial.print("Set cpi to ");
+  Serial.print("DPI set to ");
   Serial.println(cpi);
   
 }
@@ -212,7 +212,7 @@ void performStartup(void) {
   delay(10);
 
   setCPI(CPI);
-  Serial.println("Optical Chip Initialized");
+  Serial.println("Optical Chip Initialised");
 }
 
 
